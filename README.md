@@ -98,69 +98,70 @@ class MyDslGenerator extends AbstractGenerator {
 		
 		public class FSM {
 				
-				private List<State> states;
-				private List<Transition> transitions;
-				private String name;
-				private State currentState;
-				
-				/**
-				 * Constructeur de la classe
-				 */
-				private FSM(String newName){
-					this.states = new ArrayList<State>();
-					this.transitions = new ArrayList<Transition>();
-					this.name = newName;
+			private List<State> states;
+			private List<Transition> transitions;
+			private String name;
+			private State currentState;
+			
+			/**
+			 * Constructeur de la classe
+			 */
+			private FSM(String newName){
+				this.states = new ArrayList<State>();
+				this.transitions = new ArrayList<Transition>();
+				this.name = newName;
+			}
+			
+			public void setName(String newName){
+				this.name = newName;
+			}
+			
+			public String getName(){
+				return this.name;
+			}
+			
+			public void setCurrentState(State currentState) {
+				this.currentState = currentState;
+			}
+			
+			public void addState(State s) {
+				this.states.add(s);
+			}
+			
+			public void addTransition(Transition t) {
+				this.transitions.add(t);
+			}
+			
+			/**
+			 * Permet d'appeller la méthode "transit" de chaque classe Transit
+			 */
+			public void transitAll() {
+				for(int i = 0; i < transitions.size(); i++) {
+					this.currentState = transitions.get(i).transit(this.currentState);
 				}
+			}
+			
+			public static void main(String[] args) {
 				
-				public void setName(String newName){
-					this.name = newName;
-				}
+				FSM «fsm.name» = new FSM("«fsm.name»");
 				
-				public String getName(){
-					return this.name;
-				}
+				«FOR state : fsm.state.filter(State)»
+					State «state.name» = new State("«state.name»");
+					«fsm.name».addState(«state.name»); // Garde en mémoire tous les états
+				«ENDFOR»
 				
-				public void setCurrentState(State currentState) {
-					this.currentState = currentState;
-				}
+				«fsm.name».currentState = «fsm.state.filter(StartState).get(0).name»; // Associe le startState au current state de la classe.
+									
 				
-				public void addState(State s) {
-					this.states.add(s);
-				}
+				«FOR transition : fsm.transition»
+					Transition «transition.name» = new Transition("«transition.name»",«transition.source.name», «transition.target.name»);
+					«fsm.name».addTransition(«transition.name»); // Garde en mémoire toutes les transitions
+				«ENDFOR»
 				
-				public void addTransition(Transition t) {
-					this.transitions.add(t);
+				while(«fsm.name».currentState != «fsm.state.filter(FinalState).get(0).name») {
+					«fsm.name».transitAll();
 				}
-				
-				/**
-				 * Permet d'appeller la méthode "transit" de chaque classe Transit
-				 */
-				public void transitAll() {
-					for(int i = 0; i < transitions.size(); i++) {
-						this.currentState = transitions.get(i).transit(this.currentState);
-					}
-				}
-				
-				public static void main(String[] args) {
-					
-					FSM «fsm.name» = new FSM("«fsm.name»");
-					
-					«FOR state : fsm.state.filter(State)»
-						State «state.name» = new State("«state.name»");
-						«fsm.name».addState(«state.name»); // Garde en mémoire tous les états
-					«ENDFOR»
-					
-					«fsm.name».currentState = «fsm.state.filter(StartState).get(0).name»; // Associe le startState au current state de la classe.
-					
-					«FOR transition : fsm.transition»
-						Transition «transition.name» = new Transition("«transition.name»",«transition.source.name», «transition.target.name»);
-						«fsm.name».addTransition(«transition.name»); // Garde en mémoire toutes les transitions
-					«ENDFOR»
-					
-					while(«fsm.name».currentState != «fsm.state.filter(FinalState).get(0).name») {
-						«fsm.name».transitAll();
-					}
-				}
+			}
 		}
 		'''
 	}
