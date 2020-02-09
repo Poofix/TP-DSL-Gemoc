@@ -1,0 +1,16 @@
+/**
+ */
+package fr.ut2j.tp01;
+
+/**
+ * <!-- begin-user-doc -->
+ * A representation of the model object '<em><b>Start State</b></em>'.
+ * <!-- end-user-doc -->
+ *
+ *
+ * @see fr.ut2j.tp01.Tp01Package#getStartState()
+ * @model
+ * @generated
+ */
+public interface StartState extends State {
+} // StartState

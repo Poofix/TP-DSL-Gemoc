@@ -1,0 +1,42 @@
+package mydsl.tp01.aspects
+
+import fr.inria.diverse.k3.al.annotationprocessor.Aspect
+import tp01.FSM
+import tp01.State
+import tp01.Transition
+import tp01.StartState
+import tp01.FinalState
+
+import static extension mydsl.tp01.aspects.FSMAspect.*
+import static extension mydsl.tp01.aspects.StateAspect.*
+import static extension mydsl.tp01.aspects.TransitionAspect.*
+import static extension mydsl.tp01.aspects.StartStateAspect.*
+import static extension mydsl.tp01.aspects.FinalStateAspect.*
+
+@Aspect(className=FSM)
+class FSMAspect {
+
+}
+
+@Aspect(className=State)
+class StateAspect {
+
+}
+
+@Aspect(className=Transition)
+class TransitionAspect {
+
+}
+
+@Aspect(className=StartState)
+class StartStateAspect extends StateAspect {
+
+}
+
+@Aspect(className=FinalState)
+class FinalStateAspect extends StateAspect {
+
+}
+
+
+
